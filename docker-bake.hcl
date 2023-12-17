@@ -7,7 +7,7 @@ variable "VERSION" {
 }
 
 variable "PHP_VERSION" {
-    default = "8.2,8.3"
+    default = "8.3"
 }
 
 variable "GO_VERSION" {
@@ -76,9 +76,9 @@ function "_php_version" {
 target "default" {
     name = "${tgt}-php-${replace(php-version, ".", "-")}-${os}"
     matrix = {
-        os = ["bookworm", "alpine"]
+        os = ["bookworm"]
         php-version = split(",", PHP_VERSION)
-        tgt = ["builder", "runner"]
+        tgt = ["runner"]
     }
     contexts = {
         php-base = "docker-image://php:${php-version}-zts-${os}"
@@ -89,10 +89,10 @@ target "default" {
     target = tgt
     platforms = [
         "linux/amd64",
-        "linux/386",
-        "linux/arm/v6",
-        "linux/arm/v7",
-        "linux/arm64",
+        #"linux/386",
+        #"linux/arm/v6",
+        #"linux/arm/v7",
+        #"linux/arm64",
     ]
     tags = distinct(flatten(
         [for pv in php_version(php-version) : flatten([
